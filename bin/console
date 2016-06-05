@@ -1,0 +1,9 @@
+#!/usr/bin/env php
+<?php
+
+/** @var \Login\Application $app */
+require __DIR__ . '/../src/bootstrap.php';
+
+
+$console = new Login\Console($app);
+$console->run();

@@ -1,0 +1,31 @@
+{
+    "name": "szicsu/simple-sliex-login",
+    "description": "Simple sliex login",
+    "type": "project",
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "Szijarto Tamas",
+            "email": "szijarto.tamas.developer@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "php": ">=7.0",
+        "silex/silex": "2.*",
+        "silex/web-profiler": "2.*",
+
+        "symfony/monolog-bridge": "3.*",
+        "symfony/console": "3.*"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "1.*",
+        "phpunit/phpunit": "5.4.*"
+    },
+    "config":{
+      "vendor-dir": "vendor"
+    },
+    "autoload": {
+        "psr-4": { "Login\\": "src"}
+    }
+}

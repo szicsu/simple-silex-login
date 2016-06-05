@@ -1,0 +1,14 @@
+/.idea
+*.iml
+
+
+/vendor/
+/build/*
+/config/envSetup.php
+
+/cache/*
+/composer.lock
+.php_cs.cache
+
+!/cache/.gitkeep
+!/build/.gitkeep
