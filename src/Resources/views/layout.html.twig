@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{% block title %}{% endblock %} - SimpleSilexLogin</title>
+    </head>
+    <body>
+        {% set _block = block('header') %}
+        {% if _block is not empty %}
+            <header class="header">
+                <h1>{{ _block|raw }}</h1>
+            </header>
+        {% endif %}
+
+        <div id="content">
+            {% block content %}{% endblock %}
+        </div>
+        {% block javascript %}{% endblock %}
+    </body>
+</html>

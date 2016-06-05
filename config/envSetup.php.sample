@@ -1,0 +1,4 @@
+<?php
+
+putenv('SILEX_DEBUG=true');
+putenv('SILEX_ENV=local');
