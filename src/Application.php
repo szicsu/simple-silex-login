@@ -4,6 +4,7 @@ namespace Login;
 
 use Dflydev\Provider\DoctrineOrm\DoctrineOrmServiceProvider;
 use Login\ServiceProvider\ControllerProvider;
+use Login\ServiceProvider\Domain\RegistrationServiceProvider;
 use Login\ServiceProvider\RendererServiceProvider;
 use Monolog\Handler\SyslogHandler;
 use Silex\Application as SilexApplication;
@@ -12,7 +13,7 @@ use Silex\Application\TwigTrait;
 use Silex\Application\UrlGeneratorTrait;
 use Silex\ControllerCollection;
 use Silex\Provider;
-use Silex\Provider\DoctrineServiceProvider;
+
 
 /**
  * Application for Login.
@@ -53,7 +54,10 @@ class Application extends SilexApplication
         $this->register(new Provider\ServiceControllerServiceProvider());
         $this->register(new Provider\RoutingServiceProvider());
         $this->register(new Provider\HttpFragmentServiceProvider());
-        $this->register(new DoctrineServiceProvider());
+        $this->register(new Provider\FormServiceProvider());
+        $this->register(new Provider\DoctrineServiceProvider());
+        $this->register(new Provider\TranslationServiceProvider());
+
         $this->register(new DoctrineOrmServiceProvider());
 
         $this->registerTwigService();
@@ -65,6 +69,7 @@ class Application extends SilexApplication
     {
         $this->registerRendererService();
         $this->registerControllerProviderService();
+        $this->registerRegistrationServices();
     }
 
     private function registerMonologService()
@@ -117,5 +122,10 @@ class Application extends SilexApplication
             'profiler.cache_dir' => CACHE_DIR.'/profiler',
             'profiler.mount_prefix' => '/_profiler',
         ));
+    }
+
+    private function registerRegistrationServices()
+    {
+        $this->register( new RegistrationServiceProvider() );
     }
 }
