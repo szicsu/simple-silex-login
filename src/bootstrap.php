@@ -3,12 +3,14 @@
 define('CONFIG_DIR', dirname(__DIR__).'/config');
 define('SRC_DIR', dirname(__DIR__).'/src');
 define('CACHE_DIR', dirname(__DIR__).'/cache');
+define('DATA_DIR', dirname(__DIR__).'/data');
 
 if (true === is_readable($envSetup = CONFIG_DIR.'/envSetup.php')) {
     require $envSetup;
 }
 
-require dirname(__DIR__).'/vendor/autoload.php';
+$loader = require dirname(__DIR__).'/vendor/autoload.php';
+\Doctrine\Common\Annotations\AnnotationRegistry::registerLoader(array($loader, 'loadClass'));
 
 $app = new Login\Application(array(
     'debug' => (bool) getenv('SILEX_DEBUG'),

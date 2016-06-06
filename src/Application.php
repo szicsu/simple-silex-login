@@ -2,6 +2,7 @@
 
 namespace Login;
 
+use Dflydev\Provider\DoctrineOrm\DoctrineOrmServiceProvider;
 use Login\ServiceProvider\ControllerProvider;
 use Login\ServiceProvider\RendererServiceProvider;
 use Monolog\Handler\SyslogHandler;
@@ -11,6 +12,7 @@ use Silex\Application\TwigTrait;
 use Silex\Application\UrlGeneratorTrait;
 use Silex\ControllerCollection;
 use Silex\Provider;
+use Silex\Provider\DoctrineServiceProvider;
 
 /**
  * Application for Login.
@@ -51,6 +53,8 @@ class Application extends SilexApplication
         $this->register(new Provider\ServiceControllerServiceProvider());
         $this->register(new Provider\RoutingServiceProvider());
         $this->register(new Provider\HttpFragmentServiceProvider());
+        $this->register(new DoctrineServiceProvider());
+        $this->register(new DoctrineOrmServiceProvider());
 
         $this->registerTwigService();
 

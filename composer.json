@@ -12,11 +12,14 @@
     "minimum-stability": "stable",
     "require": {
         "php": ">=7.0",
+        "ext-pdo_sqlite": "*",
         "silex/silex": "2.*",
         "silex/web-profiler": "2.*",
 
         "symfony/monolog-bridge": "3.*",
-        "symfony/console": "3.*"
+        "symfony/console": "3.*",
+
+        "dflydev/doctrine-orm-service-provider": "2.*"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "1.*",
