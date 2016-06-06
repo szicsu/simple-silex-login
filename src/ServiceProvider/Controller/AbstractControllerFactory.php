@@ -20,6 +20,11 @@ abstract class AbstractControllerFactory
         $this->app = $app;
     }
 
+    protected function getApp() : Application
+    {
+        return $this->app;
+    }
+
     protected function getRenderService() : RendererServiceInterface
     {
         return $this->app['login.renderer.service'];

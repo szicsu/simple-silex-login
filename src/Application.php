@@ -14,7 +14,6 @@ use Silex\Application\UrlGeneratorTrait;
 use Silex\ControllerCollection;
 use Silex\Provider;
 
-
 /**
  * Application for Login.
  */
@@ -126,6 +125,6 @@ class Application extends SilexApplication
 
     private function registerRegistrationServices()
     {
-        $this->register( new RegistrationServiceProvider() );
+        $this->register(new RegistrationServiceProvider());
     }
 }

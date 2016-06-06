@@ -6,3 +6,7 @@ $controllers
     ->bind('home')
 ;
 
+$controllers
+    ->get('/registration', 'login.controller.registration:indexAction')
+    ->bind('registration')
+;

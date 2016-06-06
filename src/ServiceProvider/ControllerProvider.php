@@ -4,6 +4,7 @@ namespace Login\ServiceProvider;
 
 use Login\Application as LoginApplication;
 use Login\ServiceProvider\Controller\HomeControllerFactory;
+use Login\ServiceProvider\Controller\RegistrationControllerFactory;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use Silex\Api\ControllerProviderInterface;
@@ -45,5 +46,6 @@ class ControllerProvider implements ServiceProviderInterface, ControllerProvider
 
         /* @var LoginApplication $pimple */
         $pimple['login.controller.home'] = new HomeControllerFactory($pimple);
+        $pimple['login.controller.registration'] = new RegistrationControllerFactory($pimple);
     }
 }

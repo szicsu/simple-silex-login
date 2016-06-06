@@ -23,7 +23,7 @@ class Console extends ConsoleApplication
         $this->app = $app;
         $this->setDispatcher($app['dispatcher']);
 
-        if( $this->app['debug'] ){
+        if ($this->app['debug']) {
             $this->initDoctrine();
         }
     }

@@ -2,6 +2,7 @@
 
 /* @var Login\Application $app */
 
+$app['locale'] = 'en';
 
 $app['db.options'] = array(
     'driver' => 'pdo_sqlite',
