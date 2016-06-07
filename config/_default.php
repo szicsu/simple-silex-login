@@ -40,3 +40,8 @@ $app['security.firewalls'] = array(
     ),
 );
 
+
+$app['validator.validator_service_ids'] = array(
+    \Login\Validator\UniqueEmail::SERVICE_NAME => 'login.service.validator.unique.email'
+);
+

@@ -4,6 +4,7 @@ declare (strict_types = 1);
 
 namespace Login\Request;
 
+use Login\Validator\UniqueEmail;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -74,15 +75,18 @@ class RegistrationRequest
 
     public static function loadValidatorMetadata(ClassMetadata $metadata)
     {
-        $metadata->addPropertyConstraint('username', new Assert\NotBlank());
-        $metadata->addPropertyConstraint('email', new Assert\NotBlank());
-        $metadata->addPropertyConstraint('password', new Assert\NotBlank());
 
-        $metadata->addPropertyConstraint('username', new Assert\Length(array('min' => 10, 'max' => 255)));
-        $metadata->addPropertyConstraint('email', new Assert\Length(array('min' => 10, 'max' => 255)));
+        $metadata->addPropertyConstraint('username', new Assert\NotBlank());
+        $metadata->addPropertyConstraint('username', new Assert\Length(array('min' => 8, 'max' => 255)));
+
+        $metadata->addPropertyConstraint('email', new Assert\NotBlank());
+        $metadata->addPropertyConstraint('email', new Assert\Email());
+        $metadata->addPropertyConstraint('email', new UniqueEmail());
+
+
+        $metadata->addPropertyConstraint('password', new Assert\NotBlank());
         $metadata->addPropertyConstraint('password', new Assert\Length(array('min' => 8, 'max' => 255)));
 
-        //TODO - unique email
         //TODO - strong password
     }
 }

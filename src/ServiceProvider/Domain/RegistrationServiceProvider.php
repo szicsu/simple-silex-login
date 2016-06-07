@@ -6,6 +6,7 @@ use Login\Form\Factory\RegistrationFormFactory;
 use Login\Service\Persister\UserPersister;
 use Login\Service\RegistrationService;
 use Login\Service\Transformer\RegistrationRequestToUserTransformer;
+use Login\Validator\UniqueEmailValidator;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
@@ -31,6 +32,10 @@ class RegistrationServiceProvider implements ServiceProviderInterface
                 $app['login.service.persister.user'],
                 $app['validator']
             );
+        };
+
+        $app['login.service.validator.unique.email'] = function($app){
+            return new UniqueEmailValidator($app['login.service.reader.user']);
         };
     }
 }
