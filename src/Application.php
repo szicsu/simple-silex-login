@@ -4,6 +4,7 @@ namespace Login;
 
 use Dflydev\Provider\DoctrineOrm\DoctrineOrmServiceProvider;
 use Login\ServiceProvider\ControllerProvider;
+use Login\ServiceProvider\Domain\LoginServiceProvider;
 use Login\ServiceProvider\Domain\RegistrationServiceProvider;
 use Login\ServiceProvider\RendererServiceProvider;
 use Monolog\Handler\SyslogHandler;
@@ -35,7 +36,7 @@ class Application extends SilexApplication
         date_default_timezone_set('Europe/Budapest');
 
         $this->registerSilexServices();
-        $this->registerLoginServices();
+        $this->registerLoginApplicationServices();
     }
 
     /**
@@ -56,6 +57,10 @@ class Application extends SilexApplication
         $this->register(new Provider\FormServiceProvider());
         $this->register(new Provider\DoctrineServiceProvider());
         $this->register(new Provider\TranslationServiceProvider());
+        $this->register(new Provider\CsrfServiceProvider());
+        $this->register(new Provider\ValidatorServiceProvider());
+        $this->register(new Provider\SecurityServiceProvider());
+        $this->register(new Provider\SessionServiceProvider());
 
         $this->register(new DoctrineOrmServiceProvider());
 
@@ -64,11 +69,12 @@ class Application extends SilexApplication
         $this->configureDebugMode();
     }
 
-    private function registerLoginServices()
+    private function registerLoginApplicationServices()
     {
         $this->registerRendererService();
         $this->registerControllerProviderService();
         $this->registerRegistrationServices();
+        $this->registerLoginServices();
     }
 
     private function registerMonologService()
@@ -126,5 +132,10 @@ class Application extends SilexApplication
     private function registerRegistrationServices()
     {
         $this->register(new RegistrationServiceProvider());
+    }
+
+    private function registerLoginServices()
+    {
+        $this->register(new LoginServiceProvider());
     }
 }
