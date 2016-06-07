@@ -13,7 +13,7 @@ class RegistrationType extends AbstractType
     {
         parent::buildForm($builder, $options);
 
-        $builder->add('name');
+        $builder->add('username');
         $builder->add('email');
         $builder->add('password', RepeatedType::class, array(
             'type' => PasswordType::class,

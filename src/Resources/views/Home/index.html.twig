@@ -2,7 +2,17 @@
 
 {% block title %}Home{% endblock %}
 
+{% block header %}Simple Silex Login Application{% endblock %}
+
 {% block content %}
 
-    Hello World!
+    <div class="row">
+        <div class="col-sm-6">
+            <a href="{{ loginAction }}" class="btn btn-primary" role="button">Login</a>
+        </div>
+        <div class="col-sm-6">
+            <a href="{{ registrationAction }}" class="btn btn-success" role="button">Registration</a>
+        </div>
+    </div>
+
 {% endblock %}

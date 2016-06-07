@@ -2,18 +2,25 @@
 <html>
     <head>
         <title>{% block title %}{% endblock %} - SimpleSilexLogin</title>
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
     </head>
     <body>
-        {% set _block = block('header') %}
-        {% if _block is not empty %}
-            <header class="header">
-                <h1>{{ _block|raw }}</h1>
-            </header>
-        {% endif %}
+        <main class="container">
 
-        <div id="content">
-            {% block content %}{% endblock %}
-        </div>
+            {% set _block = block('header') %}
+            {% if _block is not empty %}
+                <header class="header">
+                    <h1>{{ _block }}</h1>
+                </header>
+            {% endif %}
+
+            <div class="jumbotron">
+                {% block content %}{% endblock %}
+            </div>
+
+        </main>
+
         {% block javascript %}{% endblock %}
     </body>
 </html>

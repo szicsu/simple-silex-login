@@ -1,0 +1,18 @@
+{% extends "layout.html.twig" %}
+
+{% block title %}User Profile{% endblock %}
+
+{% block header %}
+    Hello {{ username }}!
+{% endblock %}
+
+{% block content %}
+
+
+    <div class="row">
+        <div class="col-sm-6">
+            <a href="{{ logoutAction }}" class="btn btn-primary" role="button">Logout</a>
+        </div>
+    </div>
+
+{% endblock %}

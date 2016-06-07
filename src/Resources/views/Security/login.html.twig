@@ -1,0 +1,26 @@
+{% extends "layout.html.twig" %}
+
+{% block title %}Login{% endblock %}
+
+{% block header %}Login{% endblock %}
+
+{% block content %}
+
+    <form action="{{ action }}" method="post">
+        {{ lastError }}
+
+        <div class="form-group">
+            <label for="_username" class="control-label required">Username</label>
+            <input type="text" class="form-control" maxlength="255" required="required" name="_username" id="_username">
+        </div>
+        <div class="form-group">
+            <label for="_password" class="control-label required">Password</label>
+            <input type="password" class="form-control" maxlength="255" required="required" name="_password" id="_password">
+        </div>
+
+        <button type="submit" class="btn btn-primary">Login</button>
+
+    </form>
+
+
+{% endblock %}

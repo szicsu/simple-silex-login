@@ -2,11 +2,14 @@
 
 {% block title %}Registration{% endblock %}
 
-{% block content %}
+{% block header %}Registration{% endblock %}
 
-    <form action="#" method="post">
+{% block content %}
+    {% form_theme form 'bootstrap_3_layout.html.twig' %}
+    <form action="{{ action }}" method="post">
+
         {{ form_widget(form) }}
 
-        <input type="submit" name="submit" />
+        <button type="submit" class="btn btn-success">Registration</button>
     </form>
 {% endblock %}

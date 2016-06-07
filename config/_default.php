@@ -19,3 +19,24 @@ $app['orm.em.options'] = array(
         )
     )
 );
+
+$app['security.firewalls'] = array(
+
+    'secure' => array(
+        'pattern' => '^/secure',
+        'users' => $app['login.user.provider.bridge'],
+        'form' => array(
+            'login_path' => '/login',
+            'check_path' => '/secure/login-check',
+            'default_target_path' => '/secure/userprofile'
+        ),
+        'logout' => array('logout_path' => '/secure/logout', 'invalidate_session' => true),
+
+    ),
+
+    'default' => array(
+        'pattern' => '^/',
+        'anonymous' =>  true,
+    ),
+);
+

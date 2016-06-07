@@ -6,6 +6,7 @@ namespace Login\Controller;
 
 use Login\Service\Util\RendererServiceInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -54,8 +55,13 @@ abstract class AbstractController
         return $this->render($path.DIRECTORY_SEPARATOR.$file, $params, $response);
     }
 
-    protected function generateUrl(string $routeName, array $parameters = array(),  string $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH) : string
+    protected function generateUrl(string $routeName, array $parameters = array(),  int $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH) : string
     {
         return $this->router->generate($routeName, $parameters, $referenceType);
+    }
+
+    protected function redirect(string $url, int $status = 302, array $headers = array()): RedirectResponse
+    {
+        return new RedirectResponse($url, $status, $headers);
     }
 }
