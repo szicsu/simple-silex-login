@@ -2,6 +2,7 @@
 
 namespace Login\ServiceProvider\Domain;
 
+use Doctrine\ORM\EntityManager;
 use Login\Request\LoginRequestFactory;
 use Login\Service\Reader\UserReader;
 use Login\Service\Security\LoginBridge;
@@ -26,7 +27,11 @@ class LoginServiceProvider implements ServiceProviderInterface
         };
 
         $app['login.service.reader.user'] = function ($app) {
-            return new UserReader($app['orm.em']);
+
+            /** @var EntityManager $em */
+            $em = $app['orm.em'];
+
+            return new UserReader($em->getRepository(UserReader::getEntityClass()));
         };
 
         $app['login.service.login.provider.default'] = function ($app) {

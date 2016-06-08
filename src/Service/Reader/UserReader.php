@@ -4,7 +4,6 @@ declare (strict_types = 1);
 
 namespace Login\Service\Reader;
 
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityNotFoundException;
 use Doctrine\ORM\EntityRepository;
 use Login\Entity\User;
@@ -12,24 +11,24 @@ use Login\Entity\User;
 class UserReader implements UserCounterByEmailInterface, UserFinderByEmailInterface
 {
     /**
-     * @var EntityManager
+     * @var EntityRepository
      */
-    private $manager;
+    private $repository;
 
     /**
-     * @param EntityManager $manager
+     * @param EntityRepository $repository
      */
-    public function __construct(EntityManager $manager)
+    public function __construct(EntityRepository $repository)
     {
-        $this->manager = $manager;
+        $this->repository = $repository;
     }
 
     public function findOneByEmail(string $email): User
     {
         $criteria = $this->createEmailCriteria($email);
-        $user = $this->getRepository()->findOneBy($criteria);
+        $user = $this->repository->findOneBy($criteria);
         if (!$user instanceof User) {
-            throw EntityNotFoundException::fromClassNameAndIdentifier(User::class, $criteria);
+            throw EntityNotFoundException::fromClassNameAndIdentifier(self::getEntityClass(), $criteria);
         }
 
         return $user;
@@ -37,7 +36,7 @@ class UserReader implements UserCounterByEmailInterface, UserFinderByEmailInterf
 
     public function countByEmail(string $email) : int
     {
-        $query = $this->getRepository()->createQueryBuilder('u')
+        $query = $this->repository->createQueryBuilder('u')
             ->select('count(u.id)')
             ->where('u.email = :email')
             ->setParameter('email', $email)
@@ -47,13 +46,13 @@ class UserReader implements UserCounterByEmailInterface, UserFinderByEmailInterf
         return (int) $query->getSingleScalarResult();
     }
 
-    private function getRepository() : EntityRepository
-    {
-        return $this->manager->getRepository(User::class);
-    }
-
     private function createEmailCriteria(string $email)
     {
         return array('email' => $email);
+    }
+
+    public static function getEntityClass() : string
+    {
+        return User::class;
     }
 }
