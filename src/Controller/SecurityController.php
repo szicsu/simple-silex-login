@@ -44,6 +44,7 @@ class SecurityController extends AbstractController
         $lastErrorGuesser = $this->lastErrorGuesser;
         $lastUsernameGuesser = $this->lastUsernameGuesser;
 
+        // TODO - use CSRF protection
         return $this->renderActionTemplate(array(
             'lastError' => $lastErrorGuesser($request),
             'lastUsername' => $lastUsernameGuesser(),
