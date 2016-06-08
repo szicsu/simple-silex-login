@@ -5,6 +5,7 @@ declare (strict_types = 1);
 namespace Login\Service\Security\BlackList;
 
 use Login\Request\LoginRequest;
+use Login\Service\Security\BlackList\Storage\BlackListStorageInterface;
 
 class BlackListManager implements BlacklistManagerInterface
 {

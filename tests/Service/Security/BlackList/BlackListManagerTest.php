@@ -7,7 +7,7 @@ namespace Login\Tests\Service\Security\BlackList;
 
 use Login\Request\LoginRequest;
 use Login\Service\Security\BlackList\BlackListManager;
-use Login\Service\Security\BlackList\BlackListStorageInterface;
+use Login\Service\Security\BlackList\Storage\BlackListStorageInterface;
 
 class BlackListManagerTest extends \PHPUnit_Framework_TestCase
 {
