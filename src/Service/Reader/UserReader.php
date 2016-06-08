@@ -9,7 +9,7 @@ use Doctrine\ORM\EntityNotFoundException;
 use Doctrine\ORM\EntityRepository;
 use Login\Entity\User;
 
-class UserReader implements UserEmailCounterInterface
+class UserReader implements UserCounterByEmailInterface, UserFinderByEmailInterface
 {
     /**
      * @var EntityManager

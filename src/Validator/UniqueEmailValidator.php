@@ -2,7 +2,7 @@
 
 namespace Login\Validator;
 
-use Login\Service\Reader\UserEmailCounterInterface;
+use Login\Service\Reader\UserCounterByEmailInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
@@ -10,14 +10,14 @@ use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 class UniqueEmailValidator extends ConstraintValidator
 {
     /**
-     * @var UserEmailCounterInterface
+     * @var UserCounterByEmailInterface
      */
     private $userEmailCounter;
 
     /**
-     * @param UserEmailCounterInterface $userEmailCounter
+     * @param UserCounterByEmailInterface $userEmailCounter
      */
-    public function __construct(UserEmailCounterInterface $userEmailCounter)
+    public function __construct(UserCounterByEmailInterface $userEmailCounter)
     {
         $this->userEmailCounter = $userEmailCounter;
     }

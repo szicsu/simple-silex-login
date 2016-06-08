@@ -5,22 +5,22 @@ declare (strict_types = 1);
 namespace Login\Service\Security;
 
 use Login\Request\LoginRequest;
-use Login\Service\Reader\UserReader;
+use Login\Service\Reader\UserFinderByEmailInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 class UserLoginProvider implements UserLoginProviderInterface
 {
     /**
-     * @var UserReader
+     * @var UserFinderByEmailInterface
      */
-    private $userReader;
+    private $userFinder;
 
     /**
-     * @param UserReader $userReader
+     * @param UserFinderByEmailInterface $userFinder
      */
-    public function __construct(UserReader $userReader)
+    public function __construct(UserFinderByEmailInterface $userFinder)
     {
-        $this->userReader = $userReader;
+        $this->userFinder = $userFinder;
     }
 
     /**
@@ -28,6 +28,6 @@ class UserLoginProvider implements UserLoginProviderInterface
      */
     public function loadUserByLoginRequest(LoginRequest $loginRequest) : UserInterface
     {
-        return $this->userReader->findOneByEmail($loginRequest->getEmail());
+        return $this->userFinder->findOneByEmail($loginRequest->getEmail());
     }
 }
