@@ -13,7 +13,7 @@ class UniqueEmail extends Constraint
     const SERVICE_NAME = 'UniqueEmailValidatorService';
 
     protected static $errorNames = array(
-        self::NOT_UNIQUE_ERROR => 'NOT_FALSE_ERROR',
+        self::NOT_UNIQUE_ERROR => 'NOT_UNIQUE_ERROR',
     );
 
     public $message = 'This email address already used!';

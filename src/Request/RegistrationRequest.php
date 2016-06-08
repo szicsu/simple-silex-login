@@ -4,6 +4,7 @@ declare (strict_types = 1);
 
 namespace Login\Request;
 
+use Login\Validator\PasswordStrength;
 use Login\Validator\UniqueEmail;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -81,12 +82,12 @@ class RegistrationRequest
 
         $metadata->addPropertyConstraint('email', new Assert\NotBlank());
         $metadata->addPropertyConstraint('email', new Assert\Email());
-        $metadata->addPropertyConstraint('email', new UniqueEmail());
+        $metadata->addPropertyConstraint('email', new UniqueEmail()); //FIXME - twice email unique validation
 
 
         $metadata->addPropertyConstraint('password', new Assert\NotBlank());
-        $metadata->addPropertyConstraint('password', new Assert\Length(array('min' => 8, 'max' => 255)));
+        $metadata->addPropertyConstraint('password', new PasswordStrength());
 
-        //TODO - strong password
+
     }
 }

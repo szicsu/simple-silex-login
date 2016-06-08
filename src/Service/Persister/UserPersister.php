@@ -27,6 +27,7 @@ class UserPersister
 
     public function persist(User $user)
     {
+        // TODO - handle unique constraint violation
         $this->manager->persist($user);
         $this->manager->flush($user);
     }
