@@ -76,7 +76,6 @@ class RegistrationRequest
 
     public static function loadValidatorMetadata(ClassMetadata $metadata)
     {
-
         $metadata->addPropertyConstraint('username', new Assert\NotBlank());
         $metadata->addPropertyConstraint('username', new Assert\Length(array('min' => 8, 'max' => 255)));
 
@@ -84,10 +83,7 @@ class RegistrationRequest
         $metadata->addPropertyConstraint('email', new Assert\Email());
         $metadata->addPropertyConstraint('email', new UniqueEmail()); //FIXME - twice email unique validation
 
-
         $metadata->addPropertyConstraint('password', new Assert\NotBlank());
         $metadata->addPropertyConstraint('password', new PasswordStrength());
-
-
     }
 }

@@ -35,7 +35,7 @@ class UserReader implements UserEmailCounterInterface
         return $user;
     }
 
-    public function countByEmail( string $email ) : int
+    public function countByEmail(string $email) : int
     {
         $query = $this->getRepository()->createQueryBuilder('u')
             ->select('count(u.id)')
@@ -43,15 +43,14 @@ class UserReader implements UserEmailCounterInterface
             ->setParameter('email', $email)
             ->getQuery()
         ;
-        return (int)$query->getSingleScalarResult();
-    }
 
+        return (int) $query->getSingleScalarResult();
+    }
 
     private function getRepository() : EntityRepository
     {
         return $this->manager->getRepository(User::class);
     }
-
 
     private function createEmailCriteria(string $email)
     {

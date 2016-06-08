@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Login\Validator;
-
 
 use Login\Service\Reader\UserEmailCounterInterface;
 use Symfony\Component\Validator\Constraint;
@@ -37,7 +35,7 @@ class UniqueEmailValidator extends ConstraintValidator
             return;
         }
 
-        if( 0 !== $this->userEmailCounter->countByEmail($value) ){
+        if (0 !== $this->userEmailCounter->countByEmail($value)) {
             $this->context->buildViolation($constraint->message)
                 ->setParameter('{{ value }}', $this->formatValue($value))
                 ->setCode(UniqueEmail::NOT_UNIQUE_ERROR)

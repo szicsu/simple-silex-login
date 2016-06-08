@@ -1,18 +1,15 @@
 <?php
 
-
 namespace Login\Validator;
-
 
 use Symfony\Component\Validator\Constraint;
 
 class PasswordStrength extends Constraint
 {
-
-    const SHORT_ERROR     = 'd53a91b0-def3-426a-83d7-269da7ab4200';
-    const CAPITAL_ERROR   = 'd53a91b0-def3-426a-83d7-269da7ab4201';
-    const SMALL_ERROR     = 'd53a91b0-def3-426a-83d7-269da7ab4202';
-    const NUMBER_ERROR    = 'd53a91b0-def3-426a-83d7-269da7ab4203';
+    const SHORT_ERROR = 'd53a91b0-def3-426a-83d7-269da7ab4200';
+    const CAPITAL_ERROR = 'd53a91b0-def3-426a-83d7-269da7ab4201';
+    const SMALL_ERROR = 'd53a91b0-def3-426a-83d7-269da7ab4202';
+    const NUMBER_ERROR = 'd53a91b0-def3-426a-83d7-269da7ab4203';
     const SPEC_CHAR_ERROR = 'd53a91b0-def3-426a-83d7-269da7ab4204';
 
     protected static $errorNames = array(

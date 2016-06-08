@@ -34,7 +34,7 @@ class RegistrationServiceProvider implements ServiceProviderInterface
             );
         };
 
-        $app['login.service.validator.unique.email'] = function($app){
+        $app['login.service.validator.unique.email'] = function ($app) {
             return new UniqueEmailValidator($app['login.service.reader.user']);
         };
     }

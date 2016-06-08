@@ -1,14 +1,11 @@
 <?php
 
-
 namespace Login\Validator;
-
 
 use Symfony\Component\Validator\Constraint;
 
 class UniqueEmail extends Constraint
 {
-
     const NOT_UNIQUE_ERROR = 'd53a91b0-def3-426a-83d7-269da7ab420f';
     const SERVICE_NAME = 'UniqueEmailValidatorService';
 

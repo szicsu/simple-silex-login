@@ -53,11 +53,11 @@ class SecurityController extends AbstractController
 
     public function loginCheckAction()
     {
-        throw new HttpException(500,'Bad security configuration');
+        throw new HttpException(500, 'Bad security configuration');
     }
 
     public function logoutAction()
     {
-        throw new HttpException(500,'Bad security configuration');
+        throw new HttpException(500, 'Bad security configuration');
     }
 }
