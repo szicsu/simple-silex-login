@@ -67,9 +67,9 @@ class BlackListServiceProvider implements ServiceProviderInterface
     {
         $app['login.service.security.blacklist.storage.stat'] = function ($app) {
             return new BlackListStatStorage(
-                $app['login.service.security.blacklist.extractor.time'],
                 $app['login.service.security.blacklist.config'],
-                $app['login.service.security.blacklist.driver.memcached']
+                $app['login.service.security.blacklist.driver.memcached'],
+                $app['login.service.security.blacklist.extractor.time']
             );
         };
 

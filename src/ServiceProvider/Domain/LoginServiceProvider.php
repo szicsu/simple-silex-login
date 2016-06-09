@@ -7,6 +7,7 @@ use Login\Request\LoginRequestFactory;
 use Login\Service\Reader\UserReader;
 use Login\Service\Security\LoginBridge;
 use Login\Service\Security\UserLoginProvider;
+use Login\Service\Security\UserLoginProviderWithBlackList;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
@@ -22,7 +23,7 @@ class LoginServiceProvider implements ServiceProviderInterface
             return new LoginBridge(
                 $app['login.request.login.factory'],
                 $app['request_stack'],
-                $app['login.service.login.provider.default'] //TODO - change for real
+                $app['login.service.login.provider.blacklist']
             );
         };
 
@@ -36,6 +37,13 @@ class LoginServiceProvider implements ServiceProviderInterface
 
         $app['login.service.login.provider.default'] = function ($app) {
             return new UserLoginProvider($app['login.service.reader.user']);
+        };
+
+        $app['login.service.login.provider.blacklist'] = function ($app) {
+            return new UserLoginProviderWithBlackList(
+                $app['login.service.security.blacklist.manager'],
+                $app['login.service.login.provider.default']
+            );
         };
     }
 }

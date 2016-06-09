@@ -7,6 +7,7 @@ namespace Login\Service\Security;
 use Login\Entity\User;
 use Login\Request\LoginRequestFactory;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 
@@ -23,16 +24,16 @@ class LoginBridge implements UserProviderInterface
     private $loginRequestFactory;
 
     /**
-     * @var UserLoginProvider
+     * @var UserLoginProviderInterface
      */
     private $userLoginProvider;
 
     /**
      * @param LoginRequestFactory $loginRequestFactory
      * @param RequestStack        $requestStack
-     * @param UserLoginProvider   $userLoginProvider
+     * @param UserLoginProviderInterface   $userLoginProvider
      */
-    public function __construct(LoginRequestFactory $loginRequestFactory, RequestStack $requestStack, UserLoginProvider $userLoginProvider)
+    public function __construct(LoginRequestFactory $loginRequestFactory, RequestStack $requestStack, UserLoginProviderInterface $userLoginProvider)
     {
         $this->loginRequestFactory = $loginRequestFactory;
         $this->requestStack = $requestStack;
@@ -46,7 +47,11 @@ class LoginBridge implements UserProviderInterface
     {
         $loginRequest = $this->loginRequestFactory->createByEmailAndRequest($username, $this->requestStack->getCurrentRequest());
 
-        return $this->userLoginProvider->loadUserByLoginRequest($loginRequest);
+        try{
+            return $this->userLoginProvider->loadUserByLoginRequest($loginRequest);
+        } catch( \Exception $ex ){
+            throw new UsernameNotFoundException('Login failed!', 0, $ex);
+        }
     }
 
     /**

@@ -90,7 +90,7 @@ class MemcachedFactory
     private function createInstanceId(array $serverList, $persistentId, array $options)
     {
         if ($persistentId !== null) {
-            $hash = substr(md5(serialize([$serverList, $options])), 0, 8);
+            $hash = substr(md5(serialize([$serverList, $options, $this->defaultOptions])), 0, 8);
             $instanceId = $persistentId.'.'.$hash;
 
             return $instanceId;

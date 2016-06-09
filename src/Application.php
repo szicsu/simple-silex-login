@@ -4,6 +4,7 @@ namespace Login;
 
 use Dflydev\Provider\DoctrineOrm\DoctrineOrmServiceProvider;
 use Login\ServiceProvider\ControllerProvider;
+use Login\ServiceProvider\Domain\BlackListServiceProvider;
 use Login\ServiceProvider\Domain\LoginServiceProvider;
 use Login\ServiceProvider\Domain\RegistrationServiceProvider;
 use Login\ServiceProvider\UtilServiceProvider;
@@ -74,6 +75,7 @@ class Application extends SilexApplication
     {
         $this->registerRendererService();
         $this->registerControllerProviderService();
+        $this->registerBlacklistService();
         $this->registerRegistrationServices();
         $this->registerLoginServices();
     }
@@ -138,5 +140,10 @@ class Application extends SilexApplication
     private function registerLoginServices()
     {
         $this->register(new LoginServiceProvider());
+    }
+
+    private function registerBlacklistService()
+    {
+        $this->register( new BlackListServiceProvider());
     }
 }
