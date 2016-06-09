@@ -28,6 +28,7 @@
         "dflydev/doctrine-orm-service-provider": "2.*"
     },
     "require-dev": {
+        "ext-memcached": "*",
         "friendsofphp/php-cs-fixer": "1.*",
         "phpunit/phpunit": "5.4.*"
     },

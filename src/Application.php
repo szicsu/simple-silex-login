@@ -6,7 +6,7 @@ use Dflydev\Provider\DoctrineOrm\DoctrineOrmServiceProvider;
 use Login\ServiceProvider\ControllerProvider;
 use Login\ServiceProvider\Domain\LoginServiceProvider;
 use Login\ServiceProvider\Domain\RegistrationServiceProvider;
-use Login\ServiceProvider\RendererServiceProvider;
+use Login\ServiceProvider\UtilServiceProvider;
 use Monolog\Handler\SyslogHandler;
 use Silex\Application as SilexApplication;
 use Silex\Application\MonologTrait;
@@ -61,6 +61,7 @@ class Application extends SilexApplication
         $this->register(new Provider\ValidatorServiceProvider());
         $this->register(new Provider\SecurityServiceProvider());
         $this->register(new Provider\SessionServiceProvider());
+        $this->register(new Provider\MonologServiceProvider());
 
         $this->register(new DoctrineOrmServiceProvider());
 
@@ -101,7 +102,7 @@ class Application extends SilexApplication
 
     private function registerRendererService()
     {
-        $this->register(new RendererServiceProvider());
+        $this->register(new UtilServiceProvider());
     }
 
     private function registerControllerProviderService()

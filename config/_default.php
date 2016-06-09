@@ -45,3 +45,12 @@ $app['validator.validator_service_ids'] = array(
     \Login\Validator\UniqueEmail::SERVICE_NAME => 'login.service.validator.unique.email'
 );
 
+#@see http://php.net/manual/en/memcached.addservers.php
+$app['login.service.security.blacklist.driver.memcached.servers'] = array(
+   array( 'localhost', 11211)
+);
+
+#@see http://php.net/manual/en/memcached.setoption.php
+$app['login.service.security.blacklist.driver.memcached.options'] = array(
+
+);

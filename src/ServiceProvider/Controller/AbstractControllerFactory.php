@@ -27,7 +27,7 @@ abstract class AbstractControllerFactory
 
     protected function getRenderService() : RendererServiceInterface
     {
-        return $this->app['login.renderer.service'];
+        return $this->app['login.service.util.renderer'];
     }
 
     protected function getRouterService() : UrlGenerator
