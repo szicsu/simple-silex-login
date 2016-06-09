@@ -2,8 +2,6 @@
 
 declare (strict_types = 1);
 
-namespace Login\Service\Security\BlackList\Extractor;
-
 namespace Login\Service\Security\BlackList\Util;
 
 final class IpLevelUtil
@@ -11,6 +9,7 @@ final class IpLevelUtil
     const LEVEL_4 = 4;
     const LEVEL_3 = 3;
     const LEVEL_2 = 2;
+    const LEVEL_1 = 1;
 
     private function __construct()
     {
@@ -19,7 +18,7 @@ final class IpLevelUtil
     public static function getAllLevelValues() : array
     {
         return array(
-            self::LEVEL_4, self::LEVEL_3, self::LEVEL_2,
+            self::LEVEL_4, self::LEVEL_3, self::LEVEL_2, self::LEVEL_1,
         );
     }
 

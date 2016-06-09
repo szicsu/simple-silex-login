@@ -84,7 +84,8 @@ class BlackListStorage implements BlackListStorageInterface
 
     public function isInByIp(string $ip) : bool
     {
-        foreach (IpLevelUtil::getAllLevelValues() as $level) {
+        $levels = array(IpLevelUtil::LEVEL_4, IpLevelUtil::LEVEL_3, IpLevelUtil::LEVEL_2);
+        foreach ($levels as $level) {
             $key = $this->ipKeyExtractor->extractForLevel($ip, $level);
             $value = $this->driver->getByKey($key);
 
