@@ -3,6 +3,7 @@
 namespace Login\ServiceProvider\Domain;
 
 use Login\Service\Security\BlackList\BlackListConfig;
+use Login\Service\Security\BlackList\BlackListManager;
 use Login\Service\Security\BlackList\Driver\MemcachedDriver;
 use Login\Service\Security\BlackList\Extractor\EmailKeyExtractor;
 use Login\Service\Security\BlackList\Extractor\IpKeyExtractor;
@@ -22,6 +23,7 @@ class BlackListServiceProvider implements ServiceProviderInterface
         $this->registerDriver($app);
         $this->registerExtractor($app);
         $this->registerStorage($app);
+        $this->registerManager($app);
     }
 
     /**
@@ -105,5 +107,12 @@ class BlackListServiceProvider implements ServiceProviderInterface
             ),
             'statWindowSize' => 300,
         );
+    }
+
+    private function registerManager(Container $app)
+    {
+        $app['login.service.security.blacklist.manager'] = function( $app ){
+            return new BlackListManager($app['login.service.security.blacklist.storage']);
+        };
     }
 }
