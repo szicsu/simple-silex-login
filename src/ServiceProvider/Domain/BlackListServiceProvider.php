@@ -5,6 +5,7 @@ namespace Login\ServiceProvider\Domain;
 use Login\Service\Security\BlackList\Driver\MemcachedDriver;
 use Login\Service\Security\BlackList\Extractor\EmailKeyExtractor;
 use Login\Service\Security\BlackList\Extractor\IpKeyExtractor;
+use Login\Service\Security\BlackList\Extractor\TimeKeyExtractor;
 use Login\Service\Util\MemcachedFactory;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
@@ -48,6 +49,9 @@ class BlackListServiceProvider implements ServiceProviderInterface
         };
         $app['login.service.security.blacklist.extractor.ip'] = function ($app) {
             return new IpKeyExtractor();
+        };
+        $app['login.service.security.blacklist.extractor.time'] = function ($app) {
+            return new TimeKeyExtractor();
         };
     }
 }
