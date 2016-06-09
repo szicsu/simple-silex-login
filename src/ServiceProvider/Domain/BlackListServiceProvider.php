@@ -2,10 +2,13 @@
 
 namespace Login\ServiceProvider\Domain;
 
+use Login\Service\Security\BlackList\BlackListConfig;
 use Login\Service\Security\BlackList\Driver\MemcachedDriver;
 use Login\Service\Security\BlackList\Extractor\EmailKeyExtractor;
 use Login\Service\Security\BlackList\Extractor\IpKeyExtractor;
 use Login\Service\Security\BlackList\Extractor\TimeKeyExtractor;
+use Login\Service\Security\BlackList\Storage\BlackListStatStorage;
+use Login\Service\Security\BlackList\Util\IpLevelUtil;
 use Login\Service\Util\MemcachedFactory;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
@@ -14,8 +17,10 @@ class BlackListServiceProvider implements ServiceProviderInterface
 {
     public function register(Container $app)
     {
+        $this->registerConfig($app);
         $this->registerDriver($app);
         $this->registerExtractor($app);
+        $this->registerStorage($app);
     }
 
     /**
@@ -42,7 +47,7 @@ class BlackListServiceProvider implements ServiceProviderInterface
         $app['login.service.security.blacklist.driver.memcached.namespace'] = 'loginBlackList';
     }
 
-    private function registerExtractor($app)
+    private function registerExtractor(Container $app)
     {
         $app['login.service.security.blacklist.extractor.email'] = function ($app) {
             return new EmailKeyExtractor();
@@ -53,5 +58,41 @@ class BlackListServiceProvider implements ServiceProviderInterface
         $app['login.service.security.blacklist.extractor.time'] = function ($app) {
             return new TimeKeyExtractor();
         };
+    }
+
+    private function registerStorage(Container $app)
+    {
+        $app['login.service.security.blacklist.storage.stat'] = function ($app) {
+            return new BlackListStatStorage(
+                $app['login.service.security.blacklist.extractor.time'],
+                $app['login.service.security.blacklist.config'],
+                $app['login.service.security.blacklist.driver.memcached']
+            );
+        };
+    }
+
+    private function registerConfig(Container $app)
+    {
+        $app['login.service.security.blacklist.config'] = function ($app) {
+            $conf = $app['login.blacklist.config'];
+
+            return new BlackListConfig(
+                $conf['keyTTL'],
+                $conf['limitForIpMap'],
+                $conf['limitSameUser'],
+                $conf['statWindowSize']
+            );
+        };
+
+        $app['login.blacklist.config'] = array(
+            'keyTTL' => 3600,
+            'limitSameUser' => 3,
+            'limitForIpMap' => array(
+                IpLevelUtil::LEVEL_4 => 3,
+                IpLevelUtil::LEVEL_3 => 500,
+                IpLevelUtil::LEVEL_2 => 1000,
+            ),
+            'statWindowSize' => 300,
+        );
     }
 }

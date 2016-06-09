@@ -1,45 +1,72 @@
 <?php
 
+declare (strict_types = 1);
+
 namespace Login\Service\Security\BlackList;
 
-//TODO move all values to config
 use Login\Service\Security\BlackList\Util\IpLevelUtil;
 
 class BlackListConfig
 {
+    /**
+     * @var int
+     */
+    private $keyTTL;
+
+    /**
+     * @var int
+     */
+    private $limitSameUser;
+
+    /**
+     * @var array
+     */
+    private $limitForIpMap;
+
+    /**
+     * @var int
+     */
+    private $statWindowSize;
+
+    /**
+     * @param int   $keyTTL
+     * @param array $limitForIpMap
+     * @param int   $limitSameUser
+     * @param int   $statWindowSize
+     */
+    public function __construct(int $keyTTL, array $limitForIpMap, int $limitSameUser, int $statWindowSize)
+    {
+        $this->keyTTL = $keyTTL;
+        $this->limitForIpMap = $limitForIpMap;
+        $this->limitSameUser = $limitSameUser;
+        $this->statWindowSize = $statWindowSize;
+    }
+
     public function getKeyTTL(): int
     {
-        return 3600;
+        return $this->keyTTL;
     }
 
     public function getLimitSameUser() : int
     {
-        return 3;
+        return $this->limitSameUser;
     }
 
     public function getLimitIpForLevel(int $level) : int
     {
         IpLevelUtil::checkValue($level);
-
-        switch ($level) {
-            case IpLevelUtil::LEVEL_4:
-                $limit = 3;
-                break;
-
-            case IpLevelUtil::LEVEL_3:
-                $limit = 500;
-                break;
-
-            default:
-                $limit = 1000;
-                break;
+        if (isset($this->limitForIpMap[$level])) {
+            return $this->limitForIpMap[$level];
+        } else {
+            throw new \DomainException(sprintf(
+                'The level(%s) is not configured!',
+                $level
+            ));
         }
-
-        return $limit;
     }
 
     public function getStatWindowSize() : int
     {
-        return 300;
+        return $this->statWindowSize;
     }
 }
