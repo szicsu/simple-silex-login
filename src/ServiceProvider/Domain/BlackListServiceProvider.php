@@ -3,6 +3,7 @@
 namespace Login\ServiceProvider\Domain;
 
 use Login\Service\Security\BlackList\Driver\MemcachedDriver;
+use Login\Service\Security\BlackList\Extractor\EmailKeyExtractor;
 use Login\Service\Util\MemcachedFactory;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
@@ -12,6 +13,7 @@ class BlackListServiceProvider implements ServiceProviderInterface
     public function register(Container $app)
     {
         $this->registerDriver($app);
+        $this->registerExtractor($app);
     }
 
     /**
@@ -36,5 +38,12 @@ class BlackListServiceProvider implements ServiceProviderInterface
         $app['login.service.security.blacklist.driver.memcached.servers'] = array();
         $app['login.service.security.blacklist.driver.memcached.options'] = array();
         $app['login.service.security.blacklist.driver.memcached.namespace'] = 'loginBlackList';
+    }
+
+    private function registerExtractor($app)
+    {
+        $app['login.service.security.blacklist.extractor.email'] = function ($app) {
+            return new EmailKeyExtractor();
+        };
     }
 }
