@@ -21,7 +21,7 @@ class UserLoginProviderWithBlackList implements UserLoginProviderInterface
     private $innerUserLoginProvider;
 
     /**
-     * @param BlacklistManagerInterface $blacklistManager
+     * @param BlacklistManagerInterface  $blacklistManager
      * @param UserLoginProviderInterface $innerUserLoginProvider
      */
     public function __construct(BlacklistManagerInterface $blacklistManager, UserLoginProviderInterface $innerUserLoginProvider)
@@ -35,9 +35,9 @@ class UserLoginProviderWithBlackList implements UserLoginProviderInterface
      */
     public function loadUserByLoginRequest(LoginRequest $loginRequest) : UserInterface
     {
-        try{
+        try {
             return $this->innerUserLoginProvider->loadUserByLoginRequest($loginRequest);
-        } catch ( \Exception $ex ){
+        } catch (\Exception $ex) {
             $this->blacklistManager->handleBadLogin($loginRequest);
             throw  $ex;
         }

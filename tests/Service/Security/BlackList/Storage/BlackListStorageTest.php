@@ -39,7 +39,7 @@ class BlackListStorageTest extends \PHPUnit_Framework_TestCase
         $driver
             ->expects($this->exactly(2))
             ->method('increment')
-            ->willReturnCallback(function ($key, $argTtl) use (&$driverKeys,$ttl) {
+            ->willReturnCallback(function ($key, $argTtl) use (&$driverKeys, $ttl) {
                 $driverKeys[] = $key;
                 $this->assertSame($ttl, $argTtl);
             });
@@ -81,7 +81,7 @@ class BlackListStorageTest extends \PHPUnit_Framework_TestCase
         $driver
             ->expects($this->exactly(3))
             ->method('increment')
-            ->willReturnCallback(function ($key, $argTtl) use (&$driverKeys,$ttl) {
+            ->willReturnCallback(function ($key, $argTtl) use (&$driverKeys, $ttl) {
                 $driverKeys[] = $key;
                 $this->assertSame($ttl, $argTtl);
             });
