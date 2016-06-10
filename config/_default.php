@@ -24,7 +24,7 @@ $app['security.firewalls'] = array(
 
     'secure' => array(
         'pattern' => '^/secure',
-        'users' => $app['login.user.provider.bridge'],
+        'users' => $app['login.user.provider.bridge.proxy'],
         'form' => array(
             'login_path' => '/login',
             'check_path' => '/secure/login-check',

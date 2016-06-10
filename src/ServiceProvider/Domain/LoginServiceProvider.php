@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManager;
 use Login\Request\LoginRequestFactory;
 use Login\Service\Reader\UserReader;
 use Login\Service\Security\LoginBridge;
+use Login\Service\Security\LoginBridgeProxy;
 use Login\Service\Security\UserLoginProvider;
 use Login\Service\Security\UserLoginProviderWithBlackList;
 use Pimple\Container;
@@ -17,6 +18,12 @@ class LoginServiceProvider implements ServiceProviderInterface
     {
         $app['login.request.login.factory'] = function () {
             return new LoginRequestFactory();
+        };
+
+        $app['login.user.provider.bridge.proxy'] = function ($app) {
+            return new LoginBridgeProxy(function () use ($app) {
+                return $app['login.user.provider.bridge'];
+            });
         };
 
         $app['login.user.provider.bridge'] = function ($app) {

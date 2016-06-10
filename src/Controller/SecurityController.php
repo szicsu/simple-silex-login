@@ -4,6 +4,7 @@ declare (strict_types = 1);
 
 namespace Login\Controller;
 
+use Login\Service\Security\Captcha\Util\CaptchaHelper;
 use Login\Service\Util\RendererServiceInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,32 +24,42 @@ class SecurityController extends AbstractController
     private $lastUsernameGuesser;
 
     /**
+     * @var CaptchaHelper
+     */
+    private $captchaHelper;
+
+    /**
      * @param RendererServiceInterface $renderer
      * @param UrlGenerator             $router
+     * @param CaptchaHelper            $captchaHelper
      * @param \Closure                 $lastErrorGuesser
      * @param \Closure                 $lastUsernameGuesser
      */
     public function __construct(
         RendererServiceInterface $renderer,
         UrlGenerator $router,
+        CaptchaHelper $captchaHelper,
         \Closure $lastErrorGuesser,
         \Closure $lastUsernameGuesser
     ) {
         parent::__construct($renderer, $router);
         $this->lastErrorGuesser = $lastErrorGuesser;
         $this->lastUsernameGuesser = $lastUsernameGuesser;
+        $this->captchaHelper = $captchaHelper;
     }
 
     public function loginAction(Request $request) : Response
     {
         $lastErrorGuesser = $this->lastErrorGuesser;
         $lastUsernameGuesser = $this->lastUsernameGuesser;
+        $lastUsername = $lastUsernameGuesser();
 
         // TODO - use CSRF protection
         return $this->renderActionTemplate(array(
             'lastError' => $lastErrorGuesser($request),
-            'lastUsername' => $lastUsernameGuesser(),
+            'lastUsername' => $lastUsername,
             'action' => $this->generateUrl('login_check'),
+            'captcha' => $this->captchaHelper->getCaptcha($request, $lastUsername),
         ));
     }
 

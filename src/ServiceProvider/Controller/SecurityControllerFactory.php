@@ -5,6 +5,7 @@ declare (strict_types = 1);
 namespace Login\ServiceProvider\Controller;
 
 use Login\Controller\SecurityController;
+use Login\Service\Security\Captcha\Util\CaptchaHelper;
 
 class SecurityControllerFactory  extends AbstractControllerFactory
 {
@@ -13,6 +14,7 @@ class SecurityControllerFactory  extends AbstractControllerFactory
         return new SecurityController(
             $this->getRenderService(),
             $this->getRouterService(),
+            $this->getCaptchaHelper(),
             $this->getSecurityLastErrorGuesser(),
             $this->getSecurityLastUsernameGuesser()
         );
@@ -28,5 +30,10 @@ class SecurityControllerFactory  extends AbstractControllerFactory
         return function () {
             return $this->getApp()['session']->get('_security.last_username');
         };
+    }
+
+    private function getCaptchaHelper() : CaptchaHelper
+    {
+        return $this->getApp()['login.service.security.captcha.util.helper'];
     }
 }

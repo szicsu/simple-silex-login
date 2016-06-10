@@ -7,7 +7,12 @@
 {% block content %}
 
     <form action="{{ action }}" method="post">
-        {{ lastError }}
+
+        {% if lastError is not empty %}
+            <div class="alert alert-warning">
+                <strong>Login failed!</strong> {{ lastError }}
+            </div>
+        {% endif %}
 
         <div class="form-group">
             <label for="_username" class="control-label required">Username</label>
@@ -17,6 +22,15 @@
             <label for="_password" class="control-label required">Password</label>
             <input type="password" class="form-control" maxlength="255" required="required" name="_password" id="_password">
         </div>
+
+        {% if captcha is not empty %}
+            <div class="form-group form-inline">
+                <label class="control-label required ">
+                    {{ captcha }}
+                    <input type="text" class="form-control" maxlength="255" required="required" name="_captcha">
+                </label>
+            </div>
+        {% endif %}
 
         <button type="submit" class="btn btn-primary">Login</button>
 

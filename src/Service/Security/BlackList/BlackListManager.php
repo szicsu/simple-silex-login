@@ -24,7 +24,10 @@ class BlackListManager implements BlacklistManagerInterface
 
     public function handleBadLogin(LoginRequest $loginRequest)
     {
-        $this->storage->incrementByEmail($loginRequest->getEmail());
+        if ('' !== $loginRequest->getEmail()) {
+            $this->storage->incrementByEmail($loginRequest->getEmail());
+        }
+
         $this->storage->incrementByIp($loginRequest->getClientIp());
     }
 

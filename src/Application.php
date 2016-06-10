@@ -5,6 +5,7 @@ namespace Login;
 use Dflydev\Provider\DoctrineOrm\DoctrineOrmServiceProvider;
 use Login\ServiceProvider\ControllerProvider;
 use Login\ServiceProvider\Domain\BlackListServiceProvider;
+use Login\ServiceProvider\Domain\CaptchaServiceProvider;
 use Login\ServiceProvider\Domain\LoginServiceProvider;
 use Login\ServiceProvider\Domain\RegistrationServiceProvider;
 use Login\ServiceProvider\UtilServiceProvider;
@@ -73,11 +74,14 @@ class Application extends SilexApplication
 
     private function registerLoginApplicationServices()
     {
-        $this->registerRendererService();
-        $this->registerControllerProviderService();
-        $this->registerBlacklistService();
-        $this->registerRegistrationServices();
-        $this->registerLoginServices();
+        $this->register(new UtilServiceProvider());
+        $this->register(new ControllerProvider(function (ControllerCollection $controllers) {
+            require CONFIG_DIR.'/routing.php';
+        }));
+        $this->register(new RegistrationServiceProvider());
+        $this->register(new LoginServiceProvider());
+        $this->register(new BlackListServiceProvider());
+        $this->register(new CaptchaServiceProvider());
     }
 
     private function registerMonologService()
@@ -102,18 +106,6 @@ class Application extends SilexApplication
         ));
     }
 
-    private function registerRendererService()
-    {
-        $this->register(new UtilServiceProvider());
-    }
-
-    private function registerControllerProviderService()
-    {
-        $this->register(new ControllerProvider(function (ControllerCollection $controllers) {
-            require CONFIG_DIR.'/routing.php';
-        }));
-    }
-
     private function configureDebugMode()
     {
         if ($this['debug']) {
@@ -130,20 +122,5 @@ class Application extends SilexApplication
             'profiler.cache_dir' => CACHE_DIR.'/profiler',
             'profiler.mount_prefix' => '/_profiler',
         ));
-    }
-
-    private function registerRegistrationServices()
-    {
-        $this->register(new RegistrationServiceProvider());
-    }
-
-    private function registerLoginServices()
-    {
-        $this->register(new LoginServiceProvider());
-    }
-
-    private function registerBlacklistService()
-    {
-        $this->register(new BlackListServiceProvider());
     }
 }
