@@ -22,7 +22,7 @@ class CaptchaHelper
 
     /**
      * @param CaptchaManagerInterface $captchaManager
-     * @param LoginRequestFactory $loginRequestFactory
+     * @param LoginRequestFactory     $loginRequestFactory
      */
     public function __construct(CaptchaManagerInterface $captchaManager, LoginRequestFactory $loginRequestFactory)
     {
@@ -31,19 +31,19 @@ class CaptchaHelper
     }
 
     /**
-     * @param Request $request
+     * @param Request     $request
      * @param string|null $lastEmail
+     *
      * @return string|null
      */
-    public function getCaptcha( Request $request, $lastEmail = NULL )
+    public function getCaptcha(Request $request, $lastEmail = null)
     {
-        $loginRequest = $this->loginRequestFactory->createByEmailAndRequest((string)$lastEmail, $request);
+        $loginRequest = $this->loginRequestFactory->createByEmailAndRequest((string) $lastEmail, $request);
 
-        if( $this->captchaManager->isNeed($loginRequest)){
+        if ($this->captchaManager->isNeed($loginRequest)) {
             return $this->captchaManager->getMessageForDisplay($loginRequest);
-        }
-        else{
-            return NULL;
+        } else {
+            return;
         }
     }
 }
