@@ -18,10 +18,17 @@ class LoginServiceProvider implements ServiceProviderInterface
 {
     public function register(Container $app)
     {
-        $app['login.request.login.factory'] = function () {
-            return new LoginRequestFactory();
-        };
+        $this->registerFactory($app);
+        $this->registerBridge($app);
+        $this->registerProvider($app);
+        $this->registerHandler($app);
+    }
 
+    /**
+     * @param Container $app
+     */
+    private function registerBridge(Container $app)
+    {
         $app['login.user.provider.bridge.proxy'] = function ($app) {
             return new LoginBridgeProxy(function () use ($app) {
                 return $app['login.user.provider.bridge'];
@@ -35,7 +42,13 @@ class LoginServiceProvider implements ServiceProviderInterface
                 $app['login.service.login.provider']
             );
         };
+    }
 
+    /**
+     * @param Container $app
+     */
+    private function registerProvider(Container $app)
+    {
         $app['login.service.reader.user'] = function ($app) {
 
             /** @var EntityManager $em */
@@ -54,8 +67,14 @@ class LoginServiceProvider implements ServiceProviderInterface
                 $app['login.service.login.provider.default']
             );
         };
+    }
 
-        $app['security.authentication.failure_handler.secure'] = function($app){
+    /**
+     * @param Container $app
+     */
+    private function registerHandler(Container $app)
+    {
+        $app['security.authentication.failure_handler.secure'] = function ($app) {
 
             $inner = new DefaultAuthenticationFailureHandler(
                 $app,
@@ -69,8 +88,16 @@ class LoginServiceProvider implements ServiceProviderInterface
                 $inner,
                 $app['login.request.login.factory']
             );
+        };
+    }
 
-
+    /**
+     * @param Container $app
+     */
+    private function registerFactory(Container $app)
+    {
+        $app['login.request.login.factory'] = function () {
+            return new LoginRequestFactory();
         };
     }
 }
