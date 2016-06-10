@@ -24,7 +24,7 @@ class UtilServiceProvider implements ServiceProviderInterface
             \Memcached::OPT_DISTRIBUTION => \Memcached::DISTRIBUTION_CONSISTENT,
             \Memcached::OPT_POLL_TIMEOUT => 300000, // 300s
             \Memcached::OPT_RETRY_TIMEOUT => 60, //60s
-            \Memcached::OPT_BINARY_PROTOCOL => TRUE
+            \Memcached::OPT_BINARY_PROTOCOL => true,
         );
     }
 }
