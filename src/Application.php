@@ -77,10 +77,10 @@ class Application extends SilexApplication
         $this->register(new CaptchaServiceProvider());
     }
 
-    private function mountControllers(){
+    private function mountControllers()
+    {
         $this->mount('', $this['login.controller.provider']);
     }
-
 
     private function registerMonologService()
     {
