@@ -24,5 +24,3 @@ if (
 ) {
     require $fileName;
 }
-
-$app->finalizeInit();

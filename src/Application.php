@@ -39,14 +39,7 @@ class Application extends SilexApplication
 
         $this->registerSilexServices();
         $this->registerLoginApplicationServices();
-    }
-
-    /**
-     * Called after the app init.
-     */
-    public function finalizeInit()
-    {
-        $this->mount('', $this['login.controller.provider']);
+        $this->mountControllers();
     }
 
     private function registerSilexServices()
@@ -83,6 +76,11 @@ class Application extends SilexApplication
         $this->register(new BlackListServiceProvider());
         $this->register(new CaptchaServiceProvider());
     }
+
+    private function mountControllers(){
+        $this->mount('', $this['login.controller.provider']);
+    }
+
 
     private function registerMonologService()
     {
