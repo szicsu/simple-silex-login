@@ -7,10 +7,12 @@ use Login\Request\LoginRequestFactory;
 use Login\Service\Reader\UserReader;
 use Login\Service\Security\LoginBridge;
 use Login\Service\Security\LoginBridgeProxy;
+use Login\Service\Security\LoginFailureHandler;
 use Login\Service\Security\UserLoginProvider;
-use Login\Service\Security\UserLoginProviderWithBlackList;
+use Login\Service\Security\UserLoginProviderWithCaptcha;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
+use Symfony\Component\Security\Http\Authentication\DefaultAuthenticationFailureHandler;
 
 class LoginServiceProvider implements ServiceProviderInterface
 {
@@ -30,7 +32,7 @@ class LoginServiceProvider implements ServiceProviderInterface
             return new LoginBridge(
                 $app['login.request.login.factory'],
                 $app['request_stack'],
-                $app['login.service.login.provider.blacklist']
+                $app['login.service.login.provider']
             );
         };
 
@@ -46,11 +48,29 @@ class LoginServiceProvider implements ServiceProviderInterface
             return new UserLoginProvider($app['login.service.reader.user']);
         };
 
-        $app['login.service.login.provider.blacklist'] = function ($app) {
-            return new UserLoginProviderWithBlackList(
-                $app['login.service.security.blacklist.manager'],
+        $app['login.service.login.provider'] = function ($app) {
+            return new UserLoginProviderWithCaptcha(
+                $app['login.service.security.captcha.manager'],
                 $app['login.service.login.provider.default']
             );
+        };
+
+        $app['security.authentication.failure_handler.secure'] = function($app){
+
+            $inner = new DefaultAuthenticationFailureHandler(
+                $app,
+                $app['security.http_utils'],
+                array(),
+                $app['logger']
+            );
+
+            return new LoginFailureHandler(
+                $app['login.service.security.blacklist.manager'],
+                $inner,
+                $app['login.request.login.factory']
+            );
+
+
         };
     }
 }
