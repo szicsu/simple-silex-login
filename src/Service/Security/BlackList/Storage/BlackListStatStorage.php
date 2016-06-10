@@ -6,12 +6,12 @@ namespace Login\Service\Security\BlackList\Storage;
 
 use Login\Service\Security\BlackList\BlackListConfig;
 use Login\Service\Security\BlackList\Driver\DriverInterface;
-use Login\Service\Security\BlackList\Extractor\TimeKeyExtractorInterface;
+use Login\Service\Security\BlackList\Extractor\StatKeyExtractorInterface;
 
 class BlackListStatStorage implements BlackListStatStorageInterface
 {
     /**
-     * @var TimeKeyExtractorInterface
+     * @var StatKeyExtractorInterface
      */
     private $keyExtractor;
 
@@ -28,9 +28,9 @@ class BlackListStatStorage implements BlackListStatStorageInterface
     /**
      * @param BlackListConfig           $config
      * @param DriverInterface           $driver
-     * @param TimeKeyExtractorInterface $keyExtractor
+     * @param StatKeyExtractorInterface $keyExtractor
      */
-    public function __construct(BlackListConfig $config, DriverInterface $driver, TimeKeyExtractorInterface $keyExtractor)
+    public function __construct(BlackListConfig $config, DriverInterface $driver, StatKeyExtractorInterface $keyExtractor)
     {
         $this->config = $config;
         $this->driver = $driver;
@@ -42,7 +42,7 @@ class BlackListStatStorage implements BlackListStatStorageInterface
      */
     public function incrementByIpLevel(int $level)
     {
-        $this->doIncrement('ip-'.$level);
+        $this->doIncrement($this->keyExtractor->extractForIpLevel(new \DateTime(), $level));
     }
 
     /**
@@ -50,12 +50,16 @@ class BlackListStatStorage implements BlackListStatStorageInterface
      */
     public function incrementByEmail()
     {
-        $this->doIncrement('email');
+        $this->doIncrement($this->keyExtractor->extractForEmail(new \DateTime()));
     }
 
-    private function doIncrement(string $keyPrefix)
+    public function incrementByGlobalFailedLogin()
     {
-        $key = $keyPrefix.'-'.$this->keyExtractor->extract(new \DateTime(), $this->config->getStatWindowSize());
+        $this->doIncrement($this->keyExtractor->extractForGlobalFailedLogin(new \DateTime()));
+    }
+
+    private function doIncrement(string $key)
+    {
         $this->driver->increment($key, $this->config->getKeyTTL());
     }
 }

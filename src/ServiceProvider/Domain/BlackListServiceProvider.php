@@ -7,6 +7,7 @@ use Login\Service\Security\BlackList\BlackListManager;
 use Login\Service\Security\BlackList\Driver\MemcachedDriver;
 use Login\Service\Security\BlackList\Extractor\EmailKeyExtractor;
 use Login\Service\Security\BlackList\Extractor\IpKeyExtractor;
+use Login\Service\Security\BlackList\Extractor\StatKeyExtractor;
 use Login\Service\Security\BlackList\Extractor\TimeKeyExtractor;
 use Login\Service\Security\BlackList\Storage\BlackListStatStorage;
 use Login\Service\Security\BlackList\Storage\BlackListStorage;
@@ -58,6 +59,12 @@ class BlackListServiceProvider implements ServiceProviderInterface
         $app['login.service.security.blacklist.extractor.ip'] = function ($app) {
             return new IpKeyExtractor();
         };
+        $app['login.service.security.blacklist.extractor.stat'] = function ($app) {
+            return new StatKeyExtractor(
+                $app['login.service.security.blacklist.config'],
+                $app['login.service.security.blacklist.extractor.time']
+            );
+        };
         $app['login.service.security.blacklist.extractor.time'] = function ($app) {
             return new TimeKeyExtractor();
         };
@@ -69,7 +76,7 @@ class BlackListServiceProvider implements ServiceProviderInterface
             return new BlackListStatStorage(
                 $app['login.service.security.blacklist.config'],
                 $app['login.service.security.blacklist.driver.memcached'],
-                $app['login.service.security.blacklist.extractor.time']
+                $app['login.service.security.blacklist.extractor.stat']
             );
         };
 

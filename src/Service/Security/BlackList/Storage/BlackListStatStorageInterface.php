@@ -8,4 +8,5 @@ interface BlackListStatStorageInterface
 {
     public function incrementByIpLevel(int $level);
     public function incrementByEmail();
+    public function incrementByGlobalFailedLogin();
 }

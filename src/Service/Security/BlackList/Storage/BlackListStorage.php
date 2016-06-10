@@ -66,6 +66,7 @@ class BlackListStorage implements BlackListStorageInterface
     public function incrementByIp(string $ip)
     {
         $this->doIncrement($this->ipKeyExtractor->extract($ip));
+        $this->statStore->incrementByGlobalFailedLogin();
     }
 
     public function isInByEmail(string $email) : bool
