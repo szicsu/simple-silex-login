@@ -29,9 +29,9 @@ class LoginBridge implements UserProviderInterface
     private $userLoginProvider;
 
     /**
-     * @param LoginRequestFactory $loginRequestFactory
-     * @param RequestStack        $requestStack
-     * @param UserLoginProviderInterface   $userLoginProvider
+     * @param LoginRequestFactory        $loginRequestFactory
+     * @param RequestStack               $requestStack
+     * @param UserLoginProviderInterface $userLoginProvider
      */
     public function __construct(LoginRequestFactory $loginRequestFactory, RequestStack $requestStack, UserLoginProviderInterface $userLoginProvider)
     {
@@ -47,9 +47,9 @@ class LoginBridge implements UserProviderInterface
     {
         $loginRequest = $this->loginRequestFactory->createByEmailAndRequest($username, $this->requestStack->getCurrentRequest());
 
-        try{
+        try {
             return $this->userLoginProvider->loadUserByLoginRequest($loginRequest);
-        } catch( \Exception $ex ){
+        } catch (\Exception $ex) {
             throw new UsernameNotFoundException('Login failed!', 0, $ex);
         }
     }

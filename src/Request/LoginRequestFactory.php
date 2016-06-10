@@ -13,7 +13,7 @@ class LoginRequestFactory
         return new LoginRequest(
             $email,
             $request->getClientIp(),
-            (string) $request->request->get('captcha')
+            (string) $request->request->get('_captcha')
         );
     }
 }

@@ -144,6 +144,6 @@ class Application extends SilexApplication
 
     private function registerBlacklistService()
     {
-        $this->register( new BlackListServiceProvider());
+        $this->register(new BlackListServiceProvider());
     }
 }

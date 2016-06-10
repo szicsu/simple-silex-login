@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Login\Service\Security;
 
 use Login\Request\LoginRequest;
@@ -21,7 +20,7 @@ class UserLoginProviderWithCaptcha implements UserLoginProviderInterface
     private $innerUserLoginProvider;
 
     /**
-     * @param CaptchaManagerInterface $captchaManager
+     * @param CaptchaManagerInterface    $captchaManager
      * @param UserLoginProviderInterface $innerUserLoginProvider
      */
     public function __construct(CaptchaManagerInterface $captchaManager, UserLoginProviderInterface $innerUserLoginProvider)
@@ -35,11 +34,10 @@ class UserLoginProviderWithCaptcha implements UserLoginProviderInterface
      */
     public function loadUserByLoginRequest(LoginRequest $loginRequest) : UserInterface
     {
-
-        if(
+        if (
             $this->captchaManager->isNeed($loginRequest) &&
-            FALSE === $this->captchaManager->isValid( $loginRequest )
-        ){
+            false === $this->captchaManager->isValid($loginRequest)
+        ) {
             throw new LockedException();
         }
 

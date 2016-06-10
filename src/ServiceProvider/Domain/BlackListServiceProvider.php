@@ -111,7 +111,7 @@ class BlackListServiceProvider implements ServiceProviderInterface
 
     private function registerManager(Container $app)
     {
-        $app['login.service.security.blacklist.manager'] = function( $app ){
+        $app['login.service.security.blacklist.manager'] = function ($app) {
             return new BlackListManager($app['login.service.security.blacklist.storage']);
         };
     }
