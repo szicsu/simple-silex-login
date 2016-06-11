@@ -2,6 +2,7 @@
 
 namespace Login;
 
+use Login\Command\BlackListStatCommand;
 use Symfony\Component\Console\Application as ConsoleApplication;
 
 /**
@@ -26,6 +27,8 @@ class Console extends ConsoleApplication
         if ($this->app['debug']) {
             $this->initDoctrine();
         }
+
+        $this->add(new BlackListStatCommand($app['login.service.security.blacklist.stat.reader']));
     }
 
     private function initDoctrine()
