@@ -30,9 +30,9 @@ class StatKeyExtractorTest extends \PHPUnit_Framework_TestCase
         /* @var TimeKeyExtractorInterface $timeExtr */
 
         $extractor = new StatKeyExtractor($conf, $timeExtr);
-        $this->assertEquals('email-time-333', $extractor->extractForEmail($refDate));
-        $this->assertEquals('global-time-333', $extractor->extractForGlobalFailedLogin($refDate));
-        $this->assertEquals('ip-3-time-333', $extractor->extractForIpLevel($refDate, IpLevelUtil::LEVEL_3));
-        $this->assertEquals('ip-4-time-333', $extractor->extractForIpLevel($refDate, IpLevelUtil::LEVEL_4));
+        $this->assertEquals('email-stat-time-333', $extractor->extractForEmail($refDate));
+        $this->assertEquals('global-stat-time-333', $extractor->extractForGlobalFailedLogin($refDate));
+        $this->assertEquals('ip-3-stat-time-333', $extractor->extractForIpLevel($refDate, IpLevelUtil::LEVEL_3));
+        $this->assertEquals('ip-4-stat-time-333', $extractor->extractForIpLevel($refDate, IpLevelUtil::LEVEL_4));
     }
 }

@@ -58,6 +58,6 @@ class StatKeyExtractor implements StatKeyExtractorInterface
      */
     private function doExtract(\DateTimeInterface $date, string $keyPrefix) : string
     {
-        return $keyPrefix.'-'.$this->timeKeyExtractor->extract($date, $this->config->getStatWindowSize());
+        return $keyPrefix.'-stat-'.$this->timeKeyExtractor->extract($date, $this->config->getStatWindowSize());
     }
 }
