@@ -7,11 +7,12 @@ namespace Login\Tests\Service\Security\BlackList;
 
 use Login\Request\LoginRequest;
 use Login\Service\Security\BlackList\BlackListManager;
+use Login\Service\Security\BlackList\Storage\BlackListStatStorageInterface;
 use Login\Service\Security\BlackList\Storage\BlackListStorageInterface;
 
 class BlackListManagerTest extends \PHPUnit_Framework_TestCase
 {
-    public function testHandleBadLogin()
+    public function testHandleBadLoginIncGlobal()
     {
         $email = 'foo@bar.com';
         $ip = '1.2.3.4';
@@ -19,9 +20,49 @@ class BlackListManagerTest extends \PHPUnit_Framework_TestCase
         $storage = $this->createMock(BlackListStorageInterface::class);
         $storage->expects($this->once())->method('incrementByEmail')->with($this->equalTo($email));
         $storage->expects($this->once())->method('incrementByIp')->with($this->equalTo($ip));
+        $storage->expects($this->once())->method('getIpLevelThatIsInByIp')->with($this->equalTo($ip))->willReturn(false);
+
+        $stat = $this->createMock(BlackListStatStorageInterface::class);
+        $stat->expects($this->once())->method('incrementByGlobalFailedLogin');
 
         $loginRequest = new LoginRequest($email, $ip, 'FooBar');
-        $manager = new BlackListManager($storage);
+        $manager = new BlackListManager($storage, $stat);
+        $manager->handleBadLogin($loginRequest);
+    }
+
+    public function testHandleBadLoginIncEmailStat()
+    {
+        $email = 'foo@bar.com';
+        $ip = '1.2.3.4';
+
+        $storage = $this->createMock(BlackListStorageInterface::class);
+        $storage->expects($this->once())->method('getIpLevelThatIsInByIp')->with($this->equalTo($ip))->willReturn(false);
+        $storage->expects($this->once())->method('incrementByEmail')->with($this->equalTo($email));
+        $storage->expects($this->once())->method('isInByEmail')->with($this->equalTo($email))->willReturn(true);
+
+        $stat = $this->createMock(BlackListStatStorageInterface::class);
+        $stat->expects($this->once())->method('incrementByEmail');
+
+        $loginRequest = new LoginRequest($email, $ip, 'FooBar');
+        $manager = new BlackListManager($storage, $stat);
+        $manager->handleBadLogin($loginRequest);
+    }
+
+    public function testHandleBadLoginIncIpStat()
+    {
+        $email = 'foo@bar.com';
+        $ip = '1.2.3.4';
+        $level = 1;
+
+        $storage = $this->createMock(BlackListStorageInterface::class);
+        $storage->expects($this->once())->method('getIpLevelThatIsInByIp')->with($this->equalTo($ip))->willReturn($level);
+        $storage->expects($this->once())->method('incrementByIp')->with($this->equalTo($ip));
+
+        $stat = $this->createMock(BlackListStatStorageInterface::class);
+        $stat->expects($this->once())->method('incrementByIpLevel')->with($this->equalTo($level));
+
+        $loginRequest = new LoginRequest($email, $ip, 'FooBar');
+        $manager = new BlackListManager($storage, $stat);
         $manager->handleBadLogin($loginRequest);
     }
 
@@ -51,7 +92,7 @@ class BlackListManagerTest extends \PHPUnit_Framework_TestCase
             ->willReturn($isInIp);
 
         $loginRequest = new LoginRequest($email, $ip, 'FooBar');
-        $manager = new BlackListManager($storage);
+        $manager = new BlackListManager($storage, $this->createMock(BlackListStatStorageInterface::class));
         $this->assertSame($expected, $manager->isInBlackList($loginRequest));
     }
 

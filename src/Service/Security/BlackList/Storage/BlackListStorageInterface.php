@@ -10,4 +10,11 @@ interface BlackListStorageInterface
     public function incrementByIp(string $ip);
     public function isInByEmail(string $email): bool;
     public function isInByIp(string $ip) : bool;
+
+    /**
+     * @param string $ip
+     *
+     * @return int|false
+     */
+    public function getIpLevelThatIsInByIp(string $ip);
 }

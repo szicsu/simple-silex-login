@@ -9,7 +9,6 @@ use Login\Service\Security\BlackList\BlackListConfig;
 use Login\Service\Security\BlackList\Driver\DriverInterface;
 use Login\Service\Security\BlackList\Extractor\EmailKeyExtractorInterface;
 use Login\Service\Security\BlackList\Extractor\IpKeyExtractorInterface;
-use Login\Service\Security\BlackList\Storage\BlackListStatStorageInterface;
 use Login\Service\Security\BlackList\Storage\BlackListStorage;
 
 class BlackListStorageTest extends \PHPUnit_Framework_TestCase
@@ -49,8 +48,7 @@ class BlackListStorageTest extends \PHPUnit_Framework_TestCase
             $conf,
             $driver,
             $extractor,
-            $this->createEmptyIpExtractorMock(),
-            $this->createEmptyStatStorageMock()
+            $this->createEmptyIpExtractorMock()
         );
         $store->incrementByEmail($email);
         $this->assertEquals(array('foo', 'bar'), $driverKeys);
@@ -91,8 +89,7 @@ class BlackListStorageTest extends \PHPUnit_Framework_TestCase
             $conf,
             $driver,
             $this->createEmptyEmailExtractorMock(),
-            $extractor,
-            $this->createEmptyStatStorageMock()
+            $extractor
         );
         $store->incrementByIp($ip);
         $this->assertEquals(array('1.2', '1.2.3', '1.2.3.4'), $driverKeys);
@@ -130,15 +127,11 @@ class BlackListStorageTest extends \PHPUnit_Framework_TestCase
             ->willReturn($driverValue);
         /* @var DriverInterface $driver */
 
-        $stat = $this->createMock(BlackListStatStorageInterface::class);
-        $stat->expects($isInList ? $this->once() : $this->never())->method('incrementByEmail');
-
         $store = new BlackListStorage(
             $conf,
             $driver,
             $extractor,
-            $this->createEmptyIpExtractorMock(),
-            $stat
+            $this->createEmptyIpExtractorMock()
         );
 
         $this->assertSame($isInList, $store->isInByEmail($email));
@@ -157,9 +150,9 @@ class BlackListStorageTest extends \PHPUnit_Framework_TestCase
      * @param int  $configLimit
      * @param int  $level
      *
-     * @dataProvider providerIsInByIp
+     * @dataProvider provideGetIpLevelThatIsInByIp
      */
-    public function testIsInByIp(bool $isInList, int $configLimit, int $level)
+    public function testGetIpLevelThatIsInByIp(bool $isInList, int $configLimit, int $level)
     {
         $driverValue = 20;
         $driverCallCount = $isInList ? (5 - $level) : 3;
@@ -189,20 +182,21 @@ class BlackListStorageTest extends \PHPUnit_Framework_TestCase
             });
         /* @var DriverInterface $driver */
 
-        $stat = $this->createMock(BlackListStatStorageInterface::class);
-        $stat->expects($isInList ? $this->once() : $this->never())->method('incrementByIpLevel')->with($this->equalTo($level));
-
         $store = new BlackListStorage(
             $conf,
             $driver,
             $this->createEmptyEmailExtractorMock(),
-            $extractor,
-            $stat
+            $extractor
         );
-        $this->assertSame($isInList, $store->isInByIp($ip));
+
+        if (true === $isInList) {
+            $this->assertSame($level, $store->getIpLevelThatIsInByIp($ip));
+        } else {
+            $this->assertFalse($store->getIpLevelThatIsInByIp($ip));
+        }
     }
 
-    public function providerIsInByIp() : array
+    public function provideGetIpLevelThatIsInByIp() : array
     {
         return array(
             #                        isInList   configLimit  level
@@ -217,14 +211,39 @@ class BlackListStorageTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @param bool      $isInList
+     * @param int|false $level
+     *
+     * @dataProvider providerIsInByIp
+     */
+    public function testIsInByIp(bool $isInList,  $level)
+    {
+        $store = $this->getMockBuilder(BlackListStorage::class)
+                ->setMethods(['getIpLevelThatIsInByIp'])
+                ->disableOriginalConstructor()
+                ->getMock()
+        ;
+
+        $store->expects($this->once())->method('getIpLevelThatIsInByIp')->willReturn($level);
+        /* @var BlackListStorage $store */
+
+        $this->assertSame($isInList, $store->isInByIp('0.0.0.0'));
+    }
+
+    public function providerIsInByIp()
+    {
+        return array(
+            'L4' => array(true, 4),
+            'L3' => array(true, 3),
+            'L2' => array(true, 2),
+            'NO' => array(false, false),
+        );
+    }
+
     private function createEmptyIpExtractorMock() : IpKeyExtractorInterface
     {
         return $this->createMock(IpKeyExtractorInterface::class);
-    }
-
-    private function createEmptyStatStorageMock() : BlackListStatStorageInterface
-    {
-        return $this->createMock(BlackListStatStorageInterface::class);
     }
 
     private function createEmptyEmailExtractorMock()

@@ -33,57 +33,62 @@ class BlackListStorage implements BlackListStorageInterface
     private $driver;
 
     /**
-     * @var BlackListStatStorageInterface
-     */
-    private $statStore;
-
-    /**
-     * @param BlackListConfig               $config
-     * @param DriverInterface               $driver
-     * @param EmailKeyExtractorInterface    $emailKeyExtractor
-     * @param IpKeyExtractorInterface       $ipKeyExtractor
-     * @param BlackListStatStorageInterface $statStore
+     * @param BlackListConfig            $config
+     * @param DriverInterface            $driver
+     * @param EmailKeyExtractorInterface $emailKeyExtractor
+     * @param IpKeyExtractorInterface    $ipKeyExtractor
      */
     public function __construct(
         BlackListConfig $config,
         DriverInterface $driver,
         EmailKeyExtractorInterface $emailKeyExtractor,
-        IpKeyExtractorInterface $ipKeyExtractor,
-        BlackListStatStorageInterface $statStore
+        IpKeyExtractorInterface $ipKeyExtractor
     ) {
         $this->config = $config;
         $this->driver = $driver;
         $this->emailKeyExtractor = $emailKeyExtractor;
         $this->ipKeyExtractor = $ipKeyExtractor;
-        $this->statStore = $statStore;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function incrementByEmail(string $email)
     {
         $this->doIncrement($this->emailKeyExtractor->extract($email));
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function incrementByIp(string $ip)
     {
         $this->doIncrement($this->ipKeyExtractor->extract($ip));
-        $this->statStore->incrementByGlobalFailedLogin();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function isInByEmail(string $email) : bool
     {
         $key = $this->emailKeyExtractor->extractPrimary($email);
         $value = $this->driver->getByKey($key);
 
-        if ($value > $this->config->getLimitSameUser()) {
-            $this->statStore->incrementByEmail();
-
-            return true;
-        }
-
-        return false;
+        return $value > $this->config->getLimitSameUser();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function isInByIp(string $ip) : bool
+    {
+        return false !== $this->getIpLevelThatIsInByIp($ip);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getIpLevelThatIsInByIp(string $ip)
     {
         $levels = array(IpLevelUtil::LEVEL_4, IpLevelUtil::LEVEL_3, IpLevelUtil::LEVEL_2);
         foreach ($levels as $level) {
@@ -91,9 +96,7 @@ class BlackListStorage implements BlackListStorageInterface
             $value = $this->driver->getByKey($key);
 
             if ($value > $this->config->getLimitIpForLevel($level)) {
-                $this->statStore->incrementByIpLevel($level);
-
-                return true;
+                return $level;
             }
         }
 

@@ -9,6 +9,7 @@ use Login\Service\Security\BlackList\Extractor\EmailKeyExtractor;
 use Login\Service\Security\BlackList\Extractor\IpKeyExtractor;
 use Login\Service\Security\BlackList\Extractor\StatKeyExtractor;
 use Login\Service\Security\BlackList\Extractor\TimeKeyExtractor;
+use Login\Service\Security\BlackList\Reader\BlackListStatReader;
 use Login\Service\Security\BlackList\Storage\BlackListStatStorage;
 use Login\Service\Security\BlackList\Storage\BlackListStorage;
 use Login\Service\Security\BlackList\Util\IpLevelUtil;
@@ -25,6 +26,7 @@ class BlackListServiceProvider implements ServiceProviderInterface
         $this->registerExtractor($app);
         $this->registerStorage($app);
         $this->registerManager($app);
+        $this->registerReader($app);
     }
 
     /**
@@ -85,8 +87,7 @@ class BlackListServiceProvider implements ServiceProviderInterface
                 $app['login.service.security.blacklist.config'],
                 $app['login.service.security.blacklist.driver.memcached'],
                 $app['login.service.security.blacklist.extractor.email'],
-                $app['login.service.security.blacklist.extractor.ip'],
-                $app['login.service.security.blacklist.storage.stat']
+                $app['login.service.security.blacklist.extractor.ip']
             );
         };
     }
@@ -119,7 +120,21 @@ class BlackListServiceProvider implements ServiceProviderInterface
     private function registerManager(Container $app)
     {
         $app['login.service.security.blacklist.manager'] = function ($app) {
-            return new BlackListManager($app['login.service.security.blacklist.storage']);
+            return new BlackListManager(
+                $app['login.service.security.blacklist.storage'],
+                $app['login.service.security.blacklist.storage.stat']
+            );
+        };
+    }
+
+    private function registerReader(Container $app)
+    {
+        $app['login.service.security.blacklist.stat.reader'] = function ($app) {
+            return new BlackListStatReader(
+                $app['login.service.security.blacklist.config'],
+                $app['login.service.security.blacklist.driver.memcached'],
+                $app['login.service.security.blacklist.extractor.stat']
+            );
         };
     }
 }
