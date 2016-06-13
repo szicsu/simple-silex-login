@@ -55,5 +55,20 @@ $ make docker-build
 ```
 $ make docker-console
 ```
-The command create database file in container and start all service ( nginx, php-fpm, memcached ) and finally start the bash for debug and console 
+The command create database file in container and start all service ( nginx, php-fpm, memcached ) and finally start the bash for debug and console. 
 
+#### Run test in docker
+```
+$ make docker-build
+$ make docker-console
+$ cd /srv/simple-silex-login
+$ make test
+```
+
+#### Show login stat in docker
+```
+$ make docker-build
+$ make docker-console
+$ cd /srv/simple-silex-login
+$ php bin/console login:black-list:stat:show
+```
