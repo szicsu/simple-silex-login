@@ -43,3 +43,17 @@ http://login.local:8080/
 $ php bin/console login:black-list:stat:show
 ```
 
+
+##Docker
+
+#### Build container
+```
+$ make docker-build
+```
+
+#### Run container for debug
+```
+$ make docker-console
+```
+The command create database file in container and start all service ( nginx, php-fpm, memcached ) and finally start the bash for debug and console 
+
