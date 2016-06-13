@@ -6,7 +6,7 @@ $app['locale'] = 'en';
 
 $app['db.options'] = array(
     'driver' => 'pdo_sqlite',
-    'path' => DATA_DIR . '/sqlite.db',
+    'path' => getenv('DATA_SOURCE')?:  DATA_DIR . '/sqlite.db',
 );
 
 $app['orm.em.options'] = array(
