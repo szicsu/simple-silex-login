@@ -56,7 +56,7 @@ class MemcachedDriverTest extends \PHPUnit_Framework_TestCase
             ->with(
                 $this->equalTo('ns-fooBar'),
                 $this->equalTo(1),
-                $this->equalTo(0),
+                $this->equalTo(1),
                 $this->equalTo($ttl)
             )
             ->willReturn(42)
@@ -78,7 +78,7 @@ class MemcachedDriverTest extends \PHPUnit_Framework_TestCase
             ->with(
                 $this->equalTo('ns-fooBar'),
                 $this->equalTo(1),
-                $this->equalTo(0),
+                $this->equalTo(1),
                 $this->equalTo($ttl)
             )
             ->willReturn(false)
