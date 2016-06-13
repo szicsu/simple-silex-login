@@ -42,7 +42,7 @@ class MemcachedDriver implements DriverInterface
     public function increment(string $key, int $ttl)
     {
         $normKey = $this->normalizeKey($key);
-        $result = $this->memcached->increment($normKey, 1, 0, $ttl);
+        $result = $this->memcached->increment($normKey, 1, 1, $ttl);
 
         if ($result === false) {
             if ($this->memcached->getResultCode() === \Memcached::RES_NOTFOUND) {
